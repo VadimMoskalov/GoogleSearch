@@ -1,5 +1,6 @@
 package org.example.search;
 
+import org.example.search.pages.ResultPage;
 import org.example.search.pages.SearchPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,6 +16,7 @@ public class SearchTest {
 
     private WebDriver driver;
     private SearchPage searchPage;
+    private ResultPage resultPage;
 
 
     @BeforeClass
@@ -25,6 +27,7 @@ public class SearchTest {
         driver = new ChromeDriver();
 
         searchPage = PageFactory.initElements(driver, SearchPage.class);
+        resultPage = PageFactory.initElements(driver, ResultPage.class);
 
     }
 
@@ -41,10 +44,13 @@ public class SearchTest {
 
         String text = searchPage.Search("java");
 
+        int count = resultPage.getResults("java");
+
         boolean result = driver.getCurrentUrl().contains("https://www.google.com/search?");
         SoftAssert softAssert = new SoftAssert();
         softAssert.assertTrue(result);
         softAssert.assertEquals(text,"java");
+        softAssert.assertTrue(count>=5);
         softAssert.assertAll();
     }
 
